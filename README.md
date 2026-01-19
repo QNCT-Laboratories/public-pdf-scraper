@@ -1,32 +1,25 @@
-# Gamma Scraper
+# Transport-Layer PDF Fetcher
 
-Exports a public Gamma presentation to PDF using Playwright.
+A small, reliable **transport-layer PDF downloader** for public URLs.
 
-## Setup
-```bash
-npm install
-npx playwright install
+This tool fetches **real, publicly accessible PDF files** directly over HTTP(S) and saves them locally. It does **not** scrape web pages, render HTML, or attempt to bypass authentication, paywalls, or captchas.
 
-# Direct PDF Downloader
-
-A simple, reliable **direct PDF downloader** for public URLs.
-
-This tool downloads **real, publicly accessible PDF files** (e.g. `*.pdf`) and saves them locally. It does **not** scrape web apps, render pages, or bypass logins/paywalls.
-
-It is optimized for reliability:
-- Uses Node.js `fetch` first
-- Automatically falls back to `curl` if network timeouts occur
-- Handles redirects and large files
+Its purpose is to provide a clean, scriptable alternative to browser downloads and raw `curl` commands.
 
 ---
 
 ## What this tool does
 
-✅ Downloads public PDF files from direct URLs  
-❌ Does NOT scrape web pages or SPAs (Gamma, Notion, Figma, etc.)  
+✅ Downloads public PDF files from direct URLs (`*.pdf`)  
+✅ Preserves the original file (all pages, text, vectors, metadata)  
+✅ Handles redirects and large files  
+✅ Automatically falls back to `curl` if Node.js `fetch` fails
+
+❌ Does NOT scrape HTML pages or SPAs (Gamma, Notion, Figma, etc.)  
+❌ Does NOT render or convert content  
 ❌ Does NOT work behind logins, paywalls, or captchas
 
-If the URL does not point to a real PDF file, this tool will fail by design.
+If a URL does not point to a real PDF file, this tool will fail by design.
 
 ---
 
@@ -36,7 +29,7 @@ If the URL does not point to a real PDF file, this tool will fail by design.
 npm install
 ```
 
-(No browsers or Playwright required.)
+No browsers, Playwright, or additional system dependencies are required (aside from `curl`, which is available by default on macOS and most Linux systems).
 
 ---
 
@@ -48,7 +41,7 @@ npm install
 npm run scrape -- "https://example.com/file.pdf" --out myfile.pdf
 ```
 
-### Option 2: Hardcode defaults in the script
+### Option 2: Set defaults in the script
 
 Edit `scrape.mjs`:
 
@@ -71,7 +64,7 @@ node scrape.mjs
 |--------|------------|
 | `<pdf_url>` | Public direct URL to a PDF file |
 | `--out` | Output filename (default: `downloaded.pdf`) |
-| `--timeout` | Timeout in ms (default: `180000`) |
+| `--timeout` | Timeout in milliseconds (default: `180000`) |
 
 Example:
 
@@ -81,17 +74,25 @@ npm run scrape -- "https://docs.sui.io/paper/sui.pdf" --out sui.pdf --timeout 18
 
 ---
 
-## When to use this tool
+## When this tool is useful
 
 Use this tool when:
-- You have a **direct PDF link**
-- You want the **original PDF preserved** (all pages, text, vectors)
-- You need a **simple, scriptable downloader**
+- You already have a **direct PDF URL**
+- You want a **deterministic, scriptable download**
+- Browser downloads are unreliable or unsuitable (CI, servers, automation)
 
 Do NOT use this tool when:
 - The content is an HTML page
-- The site renders PDFs dynamically
-- The file requires authentication
+- The PDF is generated dynamically
+- Authentication or session cookies are required
+
+---
+
+## Philosophy
+
+This project intentionally operates at the **transport layer only**.
+
+It fetches bytes over HTTP(S) and writes them to disk — nothing more, nothing less. Any logic that attempts to scrape, render, or bypass access controls is explicitly out of scope.
 
 ---
 
