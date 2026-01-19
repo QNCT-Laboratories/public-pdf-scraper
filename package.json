@@ -1,0 +1,14 @@
+{
+    "name": "gamma-presentation-scrape",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "scrape": "node scrape.mjs"
+    },
+    "devDependencies": {
+        "pdf-lib": "^1.17.1",
+        "playwright": "^1.42.0",
+        "playwright-core": "^1.57.0"
+    }
+}
